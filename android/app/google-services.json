@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "633036302457",
+    "project_id": "construction-fd7d5",
+    "storage_bucket": "construction-fd7d5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:633036302457:android:338413cc972fb05e2e4ca8",
+        "android_client_info": {
+          "package_name": "com.example.svj"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "633036302457-l7f5i44ndo39ci4qjhm31t79h7m44sqh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCjmsXzec6-Picv-V9tMkr6MVcRAV9Lc40"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "633036302457-l7f5i44ndo39ci4qjhm31t79h7m44sqh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
