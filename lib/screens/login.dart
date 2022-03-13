@@ -72,14 +72,14 @@ class _LoginCardState extends State<LoginCard> {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      top: MediaQuery.of(context).size.height * 0.2,
+      top: MediaQuery.of(context).size.height * 0.21,
       // bottom: MediaQuery.of(context).size.height*0.0003 ,
       left: 0,
       right: 0,
       child: Container(
         margin: EdgeInsets.only(left: 20, right: 20),
         width: double.infinity,
-        height: MediaQuery.of(context).size.height * 0.68,
+        height: MediaQuery.of(context).size.height * 0.66,
         decoration: BoxDecoration(
             color: Colors.white,
             border: Border.all(color: Colors.white, width: 3),
@@ -259,7 +259,7 @@ class _LoginCardState extends State<LoginCard> {
               ],
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.025,
+              height: MediaQuery.of(context).size.height * 0.01,
             ),
             GestureDetector(
               onTap: () {

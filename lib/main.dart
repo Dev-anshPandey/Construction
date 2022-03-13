@@ -3,6 +3,7 @@ import 'package:svj/screens/home_screen.dart';
 import 'package:svj/screens/login.dart';
 import 'package:firebase_core/firebase_core.dart';
 
+
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -18,6 +19,7 @@ class MyApp extends StatelessWidget {
           colorScheme:
               ColorScheme.fromSwatch().copyWith(secondary: Colors.black)),
       initialRoute: '/',
+      debugShowCheckedModeBanner: false,
       routes: {
        '/': (context) =>  LoginPage(),
        'homeScreen': (context) => HomeScreen(),
