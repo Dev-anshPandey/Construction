@@ -1,79 +1,97 @@
 import 'dart:ui';
-
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:flutter_cube/flutter_cube.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 
 IconData icon = Icons.bookmark_border;
+
+class FireStorageService extends ChangeNotifier {
+  FireStorageService();
+  static Future<dynamic> loadImage(BuildContext context, String Image) async {
+    return await FirebaseStorage.instance.ref().child(Image).getDownloadURL();
+  }
+}
+
+getImage(BuildContext context, String ImageName) async {
+  Image? image;
+  await FireStorageService.loadImage(context, ImageName).then((value) {
+    image = Image.network(
+      value.toString(),
+    );
+  });
+  return image;
+}
+
 int activeState = 0;
-  final itemss = <Widget>[
-    Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Padding(
-          padding: EdgeInsets.only(left: 8.0),
-          child: Text(
-            "Exterior Design",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
+final itemss = <Widget>[
+  Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      const Padding(
+        padding: EdgeInsets.only(left: 8.0),
+        child: Text(
+          "Exterior Design",
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Builder(builder: (context) {
-              return Image(
-                  image: NetworkImage(
-                      "https://media.istockphoto.com/photos/modern-architecture-design-93-for-housebungalow-picture-id473745680?k=20&m=473745680&s=612x612&w=0&h=b5BeNVdq0dk_0rA61Tz1uVLYdcqskq2oM7kuSvkfZY4="));
-            }),
-          ),
+      ),
+      Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: const Image(
+              image: NetworkImage(
+                  "https://archello.s3.eu-central-1.amazonaws.com/images/2016/07/14/exteriorcontemporary.1506081591.9647.jpg")),
         ),
-      ],
-    ),
-    Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Padding(
-          padding: EdgeInsets.only(left: 8.0),
-          child: Text(
-            "Hall Design",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
+      ),
+    ],
+  ),
+  Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      const Padding(
+        padding: EdgeInsets.only(left: 8.0),
+        child: Text(
+          "Hall Design",
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: const Image(
-                image: NetworkImage(
-                    "https://cdn.pixabay.com/photo/2016/11/18/17/20/living-room-1835923__480.jpg")),
-          ),
+      ),
+      Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: const Image(
+              image: NetworkImage(
+                  "https://cdn.pixabay.com/photo/2016/11/18/17/20/living-room-1835923__480.jpg")),
         ),
-      ],
-    ),
-    Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Padding(
-          padding: EdgeInsets.only(left: 8.0),
-          child: Text(
-            "Kitchen Design",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
+      ),
+    ],
+  ),
+  Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      const Padding(
+        padding: EdgeInsets.only(left: 8.0),
+        child: Text(
+          "Kitchen Design",
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: const Image(
-                image: NetworkImage(
-                    "https://thumbs.dreamstime.com/b/kitchen-1809137.jpg")),
-          ),
+      ),
+      Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: const Image(
+              image: NetworkImage(
+                  "https://i.ytimg.com/vi/F9kyco9U8hg/maxresdefault.jpg")),
         ),
-      ],
-    ),
-  ];
+      ),
+    ],
+  ),
+];
 
 class HomeScreen extends StatefulWidget {
   final bool? isLoggedIn;
@@ -87,9 +105,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  late Object chair;
   int index = -1;
   int id = 0;
-  
+
   final items = <Widget>[
     const Icon(
       Icons.shopping_cart,
@@ -116,57 +135,19 @@ class _HomeScreenState extends State<HomeScreen> {
       size: 29,
     ),
   ];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    chair = Object(fileName: "assets/chair.obj");
+    chair.rotation.setValues(30, 215, 20);
+    chair.updateTransform();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   backgroundColor: Colors.transparent,
-      //   title: const Text("Construction"),
-      //   automaticallyImplyLeading: false,
-      //   elevation: 0,
-      //   actions: const <Widget>[
-      //     SizedBox(
-      //       width: 3,
-      //     ),
-      //     // widget.isLoggedIn == true
-      //     //     ? CircleAvatar(
-      //     //         backgroundColor: Colors.yellow, child: widget.UserImage)
-      //     //     : const Icon(
-      //     //         Icons.account_box,
-      //     //         color: Colors.black,
-      //     //         size: 30,
-      //     //       ),
-      //     SizedBox(
-      //       width: 10,
-      //     ),
-      //     Center(
-      //       child: Text(
-      //         "Construction",
-      //         style: TextStyle(
-      //             color: Colors.black,
-      //             fontWeight: FontWeight.bold,
-      //             fontSize: 25),
-      //       ),
-      //     ),
-      //     Expanded(child: SizedBox()),
-      //     Icon(
-      //       Icons.search,
-      //       color: Colors.black,
-      //       size: 30,
-      //     ),
-      //     SizedBox(
-      //       width: 10,
-      //     ),
-      //     Icon(
-      //       Icons.shopping_cart,
-      //       color: Colors.black,
-      //       size: 30,
-      //     ),
-      //     SizedBox(
-      //       width: 10,
-      //     )
-      //   ],
-      // ),
       bottomNavigationBar: CurvedNavigationBar(
         items: items,
         height: 50,
@@ -187,18 +168,6 @@ class _HomeScreenState extends State<HomeScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: const [
-                  // const SizedBox(
-                  //   width: 3,
-                  // ),
-                  // widget.isLoggedIn == true
-                  //     ? CircleAvatar(
-                  //         backgroundColor: Colors.yellow,
-                  //         child: widget.UserImage)
-                  //     :  const Icon(
-                  //       Icons.account_box_outlined,
-                  //       color: Colors.black,
-                  //        size: 40,
-                  //     ),
                   SizedBox(
                     width: 10,
                   ),
@@ -390,7 +359,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     options: CarouselOptions(
                         autoPlay: true,
                         autoPlayInterval: Duration(seconds: 3),
-                        height: MediaQuery.of(context).size.height * 0.374,
+                        height: MediaQuery.of(context).size.height * 0.32,
                         onPageChanged: (index, reason) {
                           setState(() {
                             activeState = index;
@@ -440,26 +409,21 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Container(
-                              margin: EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20)),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Image(
-                                    fit: BoxFit.cover,
-                                    height: MediaQuery.of(context).size.height *
-                                        0.16,
-                                    width: MediaQuery.of(context).size.width *
-                                        0.45,
-                                    image: const NetworkImage(
-                                        "https://i.pinimg.com/originals/da/02/78/da0278e761c149630553f4dc4c742b4b.jpg")),
-                              ),
-                            ),
-                          ],
+                      
+                        Container(
+                          margin: EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20)),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image(
+                                fit: BoxFit.cover,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.16,
+                                width: MediaQuery.of(context).size.width * 0.45,
+                                image: const NetworkImage(
+                                    "https://i.pinimg.com/originals/da/02/78/da0278e761c149630553f4dc4c742b4b.jpg")),
+                          ),
                         ),
                         Container(
                           decoration: const BoxDecoration(),
@@ -477,66 +441,49 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ]),
                         ),
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.all(8),
-                                    decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(20)),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: Image(
-                                          fit: BoxFit.cover,
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.16,
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.45,
-                                          image: const NetworkImage(
-                                              "https://i.pinimg.com/originals/25/4c/80/254c80ef467dd7fff459c58c5e29a6bf.jpg")),
-                                    ),
-                                  ),
-                                ],
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20)),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Image(
+                                    fit: BoxFit.cover,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.16,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.45,
+                                    image: const NetworkImage(
+                                        "https://i.pinimg.com/originals/25/4c/80/254c80ef467dd7fff459c58c5e29a6bf.jpg")),
                               ),
-                              Container(
-                                margin: EdgeInsets.only(right: 8),
-                                decoration: const BoxDecoration(),
-                                child: Column(children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: Image(
-                                        fit: BoxFit.cover,
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                                0.16,
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.45,
-                                        image: const NetworkImage(
-                                            "https://i0.wp.com/www.bioenergyconsult.com/wp-content/uploads/2020/07/hall-design-ideas.png?ssl=1")),
-                                  ),
-                                ]),
-                              ),
-                            ],
-                          ),
+                            ),
+                          ],
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(right: 8),
+                          decoration: const BoxDecoration(),
+                          child: Column(children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Image(
+                                  fit: BoxFit.cover,
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.16,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.45,
+                                  image: const NetworkImage(
+                                      "https://i0.wp.com/www.bioenergyconsult.com/wp-content/uploads/2020/07/hall-design-ideas.png?ssl=1")),
+                            ),
+                          ]),
                         ),
                       ],
                     ),
                   ),
-                  SizedBox(
-                    height:15
-                  ),
-                   Row(
+                  SizedBox(height: 15),
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: const [
                       Padding(
@@ -560,26 +507,20 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Container(
-                              margin: EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20)),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Image(
-                                    fit: BoxFit.cover,
-                                    height: MediaQuery.of(context).size.height *
-                                        0.16,
-                                    width: MediaQuery.of(context).size.width *
-                                        0.45,
-                                    image: const NetworkImage(
-                                        "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/modern-bedroom-2-1575657173.jpg")),
-                              ),
-                            ),
-                          ],
+                        Container(
+                          margin: EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20)),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image(
+                                fit: BoxFit.cover,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.16,
+                                width: MediaQuery.of(context).size.width * 0.45,
+                                image: const NetworkImage(
+                                    "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/modern-bedroom-2-1575657173.jpg")),
+                          ),
                         ),
                         Container(
                           decoration: const BoxDecoration(),
@@ -597,67 +538,485 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ]),
                         ),
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.all(8),
-                                    decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(20)),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: Image(
-                                          fit: BoxFit.cover,
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.16,
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.45,
-                                          image: const NetworkImage(
-                                              "https://storage.planner5d.com/s/72b36fe50f4b4b8094d3546d3c0b0da6_14.jpg?v=1613933502")),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Container(
-                                margin: EdgeInsets.only(right: 8),
-                                decoration: const BoxDecoration(),
-                                child: Column(children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: Image(
-                                        fit: BoxFit.cover,
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                                0.16,
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.45,
-                                        image: const NetworkImage(
-                                            "https://maxhouzez.com/au/wp-content/uploads/sites/9/2021/09/1632722537_maxresdefault.jpg")),
-                                  ),
-                                ]),
-                              ),
-                            ],
+                        Container(
+                          margin: EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20)),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image(
+                                fit: BoxFit.cover,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.16,
+                                width: MediaQuery.of(context).size.width * 0.45,
+                                image: const NetworkImage(
+                                    "https://storage.planner5d.com/s/72b36fe50f4b4b8094d3546d3c0b0da6_14.jpg?v=1613933502")),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(right: 8),
+                          decoration: const BoxDecoration(),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image(
+                                fit: BoxFit.cover,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.16,
+                                width: MediaQuery.of(context).size.width * 0.45,
+                                image: const NetworkImage(
+                                    "https://maxhouzez.com/au/wp-content/uploads/sites/9/2021/09/1632722537_maxresdefault.jpg")),
                           ),
                         ),
                       ],
                     ),
                   ),
                   SizedBox(
-                    height: 10,
+                    height: 20,
                   )
                 ],
               ),
+              const SizedBox(
+                height: 6,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: const [
+                  Padding(
+                    padding: EdgeInsets.only(left: 8.0),
+                    child: Text(
+                      "Engineers,Shops and more",
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Icon(
+                    Icons.keyboard_arrow_right,
+                  )
+                ],
+              ),
+              const SizedBox(
+                height: 2,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Card(
+                        child: Container(               
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 8.0, left: 8, right: 8, bottom: 4),
+                                child: Row(
+                                  children: [
+                                    const CircleAvatar(
+                                      
+                                      radius: 40,
+                                      backgroundImage: NetworkImage(
+                                          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuB0dKQNB6ElAEzGtZ_FZmhJmphRR3BaGjmfmdO5IOTNXiEDKoTlCpSEWf1tFTEPF99dA&usqp=CAU"),
+                                    ),
+                                    const SizedBox(
+                                      width: 20,
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: const [
+                                        Text(
+                                          "Exp: 2-3 yr",
+                                          style: TextStyle(color: Colors.grey),
+                                        ),
+                                        Text("Projects: 5",
+                                            style:
+                                                TextStyle(color: Colors.grey)),
+                                        Text("Working Location : Gor..\nDeoria , Mahrajganj",
+                                            style:
+                                                TextStyle(color: Colors.grey)),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 0,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 14.0, right: 8, bottom: 8),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    const Text("Er. Abc xyz"),
+                                    SizedBox(
+                                      width: 30,
+                                    ),
+                                    Card(
+                                        child: Row(
+                                      children: const [
+                                        Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 8.0, top: 4, bottom: 4),
+                                          child: Text("4.8",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold)),
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.only(
+                                              right: 4.0,
+                                              left: 4,
+                                              top: 2,
+                                              bottom: 2),
+                                          child: Icon(
+                                            Icons.star,
+                                            color: Colors.yellow,
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.only(right: 8.0),
+                                          child: Text("(4)"),
+                                        ),
+                                       
+                                      ],
+                                    )
+                                    ),
+                                 const   SizedBox(
+                                      width: 25,
+                                    ),
+                                      const Icon(Icons.message,color: Colors.blue)
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 4,
+                              ),
+                             
+                            ],
+                          ),
+                        ),
+                        
+                      ),
+                         Card(
+                        child: Container(               
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 8.0, left: 8, right: 8, bottom: 4),
+                                child: Row(
+                                  children: [
+                                    const CircleAvatar(
+                                      
+                                      radius: 40,
+                                      backgroundImage: NetworkImage(
+                                          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuB0dKQNB6ElAEzGtZ_FZmhJmphRR3BaGjmfmdO5IOTNXiEDKoTlCpSEWf1tFTEPF99dA&usqp=CAU"),
+                                    ),
+                                    const SizedBox(
+                                      width: 20,
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: const [
+                                        Text(
+                                          "Exp: 2-3 yr",
+                                          style: TextStyle(color: Colors.grey),
+                                        ),
+                                        Text("Projects: 5",
+                                            style:
+                                                TextStyle(color: Colors.grey)),
+                                        Text("Working Location : Gor..\nDeoria , Mahrajganj",
+                                            style:
+                                                TextStyle(color: Colors.grey)),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 0,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 14.0, right: 8, bottom: 8),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    const Text("Er. Abc xyz"),
+                                    SizedBox(
+                                      width: 30,
+                                    ),
+                                    Card(
+                                        child: Row(
+                                      children: const [
+                                        Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 8.0, top: 4, bottom: 4),
+                                          child: Text("4.8",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold)),
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.only(
+                                              right: 4.0,
+                                              left: 4,
+                                              top: 2,
+                                              bottom: 2),
+                                          child: Icon(
+                                            Icons.star,
+                                            color: Colors.yellow,
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.only(right: 8.0),
+                                          child: Text("(4)"),
+                                        ),
+                                       
+                                      ],
+                                    )
+                                    ),
+                                 const   SizedBox(
+                                      width: 25,
+                                    ),
+                                      const Icon(Icons.message,color: Colors.blue)
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 4,
+                              ),
+                             
+                            ],
+                          ),
+                        ),
+                        
+                      ),
+                        Card(
+                        child: Container(               
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 8.0, left: 8, right: 8, bottom: 4),
+                                child: Row(
+                                  children: [
+                                    const CircleAvatar(
+                                      
+                                      radius: 40,
+                                      backgroundImage: NetworkImage(
+                                          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuB0dKQNB6ElAEzGtZ_FZmhJmphRR3BaGjmfmdO5IOTNXiEDKoTlCpSEWf1tFTEPF99dA&usqp=CAU"),
+                                    ),
+                                    const SizedBox(
+                                      width: 20,
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: const [
+                                        Text(
+                                          "Exp: 2-3 yr",
+                                          style: TextStyle(color: Colors.grey),
+                                        ),
+                                        Text("Projects: 5",
+                                            style:
+                                                TextStyle(color: Colors.grey)),
+                                        Text("Working Location : Gor..\nDeoria , Mahrajganj",
+                                            style:
+                                                TextStyle(color: Colors.grey)),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 0,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 14.0, right: 8, bottom: 8),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    const Text("Er. Abc xyz"),
+                                    SizedBox(
+                                      width: 30,
+                                    ),
+                                    Card(
+                                        child: Row(
+                                      children: const [
+                                        Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 8.0, top: 4, bottom: 4),
+                                          child: Text("4.8",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold)),
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.only(
+                                              right: 4.0,
+                                              left: 4,
+                                              top: 2,
+                                              bottom: 2),
+                                          child: Icon(
+                                            Icons.star,
+                                            color: Colors.yellow,
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.only(right: 8.0),
+                                          child: Text("(4)"),
+                                        ),
+                                       
+                                      ],
+                                    )
+                                    ),
+                                 const   SizedBox(
+                                      width: 25,
+                                    ),
+                                      const Icon(Icons.message,color: Colors.blue)
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 4,
+                              ),
+                             
+                            ],
+                          ),
+                        ),
+                        
+                      ),
+                       Card(
+                        child: Container(               
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 8.0, left: 8, right: 8, bottom: 4),
+                                child: Row(
+                                  children: [
+                                    const CircleAvatar(
+                                      
+                                      radius: 40,
+                                      backgroundImage: NetworkImage(
+                                          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuB0dKQNB6ElAEzGtZ_FZmhJmphRR3BaGjmfmdO5IOTNXiEDKoTlCpSEWf1tFTEPF99dA&usqp=CAU"),
+                                    ),
+                                    const SizedBox(
+                                      width: 20,
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: const [
+                                        Text(
+                                          "Exp: 2-3 yr",
+                                          style: TextStyle(color: Colors.grey),
+                                        ),
+                                        Text("Projects: 5",
+                                            style:
+                                                TextStyle(color: Colors.grey)),
+                                        Text("Working Location : Gor..\nDeoria , Mahrajganj",
+                                            style:
+                                                TextStyle(color: Colors.grey)),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 0,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 14.0, right: 8, bottom: 8),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    const Text("Er. Abc xyz"),
+                                    SizedBox(
+                                      width: 30,
+                                    ),
+                                    Card(
+                                        child: Row(
+                                      children: const [
+                                        Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 8.0, top: 4, bottom: 4),
+                                          child: Text("4.8",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold)),
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.only(
+                                              right: 4.0,
+                                              left: 4,
+                                              top: 2,
+                                              bottom: 2),
+                                          child: Icon(
+                                            Icons.star,
+                                            color: Colors.yellow,
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.only(right: 8.0),
+                                          child: Text("(4)"),
+                                        ),
+                                       
+                                      ],
+                                    )
+                                    ),
+                                 const   SizedBox(
+                                      width: 25,
+                                    ),
+                                      const Icon(Icons.message,color: Colors.blue)
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 4,
+                              ),
+                             
+                            ],
+                          ),
+                        ),
+                        
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 30),
+
+              //Chair by Poly by Google [CC-BY], via Poly Pizza
+              Container(
+                height: 400,
+                width: 400,
+                child: Cube(
+                  onSceneCreated: (Scene scene) {
+                    scene.world.add(chair);
+                    scene.camera.zoom = 12;
+                  },
+                ),
+              )
             ],
           ),
         ),
@@ -696,54 +1055,22 @@ class DisplayType extends StatelessWidget {
   }
 }
 
-
-
 class DotIndicator extends StatelessWidget {
-  const DotIndicator({ Key? key }) : super(key: key);
+  const DotIndicator({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AnimatedSmoothIndicator(
       count: itemss.length,
       activeIndex: activeState,
-      effect: const SlideEffect(activeDotColor: Colors.black,
-      dotColor: Colors.grey
-      ,dotHeight: 12,
-      dotWidth: 12
-      ),
-      
+      effect: const SlideEffect(
+          activeDotColor: Colors.black,
+          dotColor: Colors.grey,
+          dotHeight: 12,
+          dotWidth: 12),
     );
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // return Scaffold(
 //       body: Container(
@@ -751,7 +1078,7 @@ class DotIndicator extends StatelessWidget {
 //          padding: EdgeInsets.only(top: 0, left: 10),
 //           child: Row(
 //             children:   [
-              
+
 //              const Center(
 //                 child: Text(
 //                   "Construction",
@@ -760,7 +1087,7 @@ class DotIndicator extends StatelessWidget {
 //                     fontWeight: FontWeight.bold,
 //                     fontSize: 25
 //                   ),
-                  
+
 //                 ),
 //               ),
 //               Column(
@@ -795,3 +1122,32 @@ class DotIndicator extends StatelessWidget {
 //         ),
 //       ),
 //     );
+
+
+
+// Builder(builder: (context) {
+//         return FutureBuilder(
+//           future:
+//               getImage(context, "home-exterior-designing-service-500x500.jpg"),
+//           builder: (context, snapshot) {
+//             if (snapshot.connectionState == ConnectionState.done) {
+//               return Container(
+//                 height: 250,
+//                 width: 400,
+//                 child: Padding(
+//                   padding: const EdgeInsets.all(8.0),
+//                   child: ClipRRect(
+//                       borderRadius: BorderRadius.circular(10),
+//                       child: snapshot.data as Widget),
+//                 ),
+//               );
+//             }
+//             if (snapshot.connectionState == ConnectionState.waiting) {
+//               return Container(
+//                 child: CircularProgressIndicator(),
+//               );
+//             }
+//             return Container();
+//           },
+//         );
+//       })

@@ -29,11 +29,16 @@ environment:
 dependencies:
   blurrycontainer: ^0.1.0
   carousel_slider: ^4.0.0
+  cloud_firestore: ^3.1.11
   cupertino_icons: ^1.0.2
   curved_navigation_bar: ^1.0.3
   firebase_auth: ^3.3.6
+  firebase_core: ^1.14.0
+  firebase_dynamic_links: ^4.0.7
+  firebase_storage: ^10.2.11
   flutter:
     sdk: flutter
+  flutter_cube: ^0.1.1
   google_sign_in: ^5.2.3
   provider: ^6.0.2
   smooth_page_indicator: ^1.0.0+2
