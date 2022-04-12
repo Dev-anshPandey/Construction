@@ -6,4 +6,5 @@ LogIn Page
 
 Home Screen
 
-![WhatsApp Image 2022-03-13 at 11 36 27 PM](https://user-images.githubusercontent.com/84534408/160271185-5244b1ce-46e9-40f0-b081-10705dd5c181.jpeg)
+![1649761461420](https://user-images.githubusercontent.com/84534408/162947248-5aaa73ae-2911-47db-8da1-5f46eb22ad04.jpg)
+
