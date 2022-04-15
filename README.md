@@ -1,5 +1,9 @@
 # Construction
 
+A app through which you can find perfect designs for your house, purchase materials (cement , 
+paint ,marbles etc) online , contact with local engineers for guidance/deals , look for houses/lands for rent or purchase 
+and find a suitable home loan as per your need.
+
 LogIn Page
 
 ![WhatsApp Image 2022-03-13 at 11 36 28 PM](https://user-images.githubusercontent.com/84534408/160271133-efe9bb92-442e-4cf0-bd8e-d9c7a6e4ba8a.jpeg)
