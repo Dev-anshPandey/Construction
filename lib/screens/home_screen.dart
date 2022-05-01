@@ -32,43 +32,47 @@ int activeState = 0;
 //Provider.of<LoggedInUser>(context);
 //Provider.of<CarouselState>(context,listen: false).LoggedInUserDetail(link: Image.network(user.photoUrl.toString()) );
 final itemss = <Widget>[
-  Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      const Padding(
-        padding: EdgeInsets.only(left: 8.0),
-        child: Text(
-          "Exterior Design",
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
+  Builder(builder: (context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(context, 'designPage');
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Padding(
+            padding: EdgeInsets.only(left: 8.0),
+            child: Text(
+              "Exterior Design",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Image(
+                  errorBuilder: (a, b, c) {
+                    return Builder(builder: (context) {
+                      return Container(
+                        height: MediaQuery.of(context).size.height * 0.27,
+                        width: MediaQuery.of(context).size.width * 0.93,
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Color(0xffdadada)),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(15)),
+                            color: Colors.grey[300]),
+                      );
+                    });
+                  },
+                  image: const NetworkImage(
+                      "https://archello.s3.eu-central-1.amazonaws.com/images/2016/07/14/exteriorcontemporary.1506081591.9647.jpg")),
+            ),
+          ),
+        ],
       ),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(10),
-          child:  Image(
-            errorBuilder: (a, b, c) {
-                                  return Builder(
-                                    builder: (context) {
-                                      return Container(
-                                         height:
-                                        MediaQuery.of(context).size.height * 0.27,
-                                width: MediaQuery.of(context).size.width * 0.93,
-                                decoration: BoxDecoration(
-                                      border: Border.all(color:Color(0xffdadada)),
-                                      borderRadius: const BorderRadius.all(Radius.circular(15)),
-                                      color:Colors.grey[300]
-                                ),
-                                      );
-                                    }
-                                  );
-                                },
-              image: const NetworkImage(
-                  "https://archello.s3.eu-central-1.amazonaws.com/images/2016/07/14/exteriorcontemporary.1506081591.9647.jpg")),
-        ),
-      ),
-    ],
-  ),
+    );
+  }),
   Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -83,23 +87,20 @@ final itemss = <Widget>[
         padding: const EdgeInsets.all(8.0),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(10),
-          child:  Image(
-            errorBuilder: (a, b, c) {
-                                  return Builder(
-                                    builder: (context) {
-                                      return Container(
-                                         height:
-                                        MediaQuery.of(context).size.height * 0.27,
-                                width: MediaQuery.of(context).size.width * 0.93,
-                                decoration: BoxDecoration(
-                                      border: Border.all(color:Color(0xffdadada)),
-                                      borderRadius: const BorderRadius.all(Radius.circular(15)),
-                                      color:Colors.grey[300]
-                                ),
-                                      );
-                                    }
-                                  );
-                                },
+          child: Image(
+              errorBuilder: (a, b, c) {
+                return Builder(builder: (context) {
+                  return Container(
+                    height: MediaQuery.of(context).size.height * 0.27,
+                    width: MediaQuery.of(context).size.width * 0.93,
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Color(0xffdadada)),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(15)),
+                        color: Colors.grey[300]),
+                  );
+                });
+              },
               image: const NetworkImage(
                   "https://cdn.pixabay.com/photo/2016/11/18/17/20/living-room-1835923__480.jpg")),
         ),
@@ -120,25 +121,22 @@ final itemss = <Widget>[
         padding: const EdgeInsets.all(8.0),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(10),
-          child:  Image(
-            errorBuilder: (a, b, c) {
-                                  return Builder(
-                                    builder: (context) {
-                                      return Container(
-                                        height:
-                                        MediaQuery.of(context).size.height * 0.27,
-                                width: MediaQuery.of(context).size.width * 0.93,
-                                decoration: BoxDecoration(
-                                      border: Border.all(color:Color(0xffdadada)),
-                                      borderRadius: const BorderRadius.all(Radius.circular(15)),
-                                      color:Colors.grey[300]
-                                ),
-                                      );
-                                    }
-                                  );
-                                },
-              image:
-                 const NetworkImage("https://www.wowkitchens.in/images/img1.jpg")),
+          child: Image(
+              errorBuilder: (a, b, c) {
+                return Builder(builder: (context) {
+                  return Container(
+                    height: MediaQuery.of(context).size.height * 0.27,
+                    width: MediaQuery.of(context).size.width * 0.93,
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Color(0xffdadada)),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(15)),
+                        color: Colors.grey[300]),
+                  );
+                });
+              },
+              image: const NetworkImage(
+                  "https://www.wowkitchens.in/images/img1.jpg")),
         ),
       ),
     ],
@@ -502,23 +500,24 @@ class _HomeScreenState extends State<HomeScreen> {
                         //   );
                         // })
                         Container(
-                          
                           margin: EdgeInsets.all(8),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20)),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10),
                             child: Image(
-                              errorBuilder: (a, b, c) {
+                                errorBuilder: (a, b, c) {
                                   return Container(
-                                     height:
-                                    MediaQuery.of(context).size.height * 0.16,
-                                width: MediaQuery.of(context).size.width * 0.45,
-                                decoration: BoxDecoration(
-                                  border: Border.all(color:Color(0xffdadada)),
-                                  borderRadius: const BorderRadius.all(Radius.circular(15)),
-                                  color:Colors.grey[300]
-                                ),
+                                    height: MediaQuery.of(context).size.height *
+                                        0.16,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.45,
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color: Color(0xffdadada)),
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(15)),
+                                        color: Colors.grey[300]),
                                   );
                                 },
                                 fit: BoxFit.cover,
@@ -536,18 +535,21 @@ class _HomeScreenState extends State<HomeScreen> {
                             ClipRRect(
                               borderRadius: BorderRadius.circular(10),
                               child: Image(
-                                errorBuilder: (a, b, c) {
-                                  return Container(
-                                     height:
-                                    MediaQuery.of(context).size.height * 0.16,
-                                width: MediaQuery.of(context).size.width * 0.45,
-                                decoration: BoxDecoration(
-                                  border: Border.all(color:Color(0xffdadada)),
-                                  borderRadius: const BorderRadius.all(Radius.circular(15)),
-                                  color:Colors.grey[300]
-                                ),
-                                  );
-                                },
+                                  errorBuilder: (a, b, c) {
+                                    return Container(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.16,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.45,
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: Color(0xffdadada)),
+                                          borderRadius: const BorderRadius.all(
+                                              Radius.circular(15)),
+                                          color: Colors.grey[300]),
+                                    );
+                                  },
                                   fit: BoxFit.cover,
                                   height:
                                       MediaQuery.of(context).size.height * 0.16,
@@ -568,18 +570,23 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(10),
                                 child: Image(
-                                  errorBuilder: (a, b, c) {
-                                  return Container(
-                                     height:
-                                    MediaQuery.of(context).size.height * 0.16,
-                                width: MediaQuery.of(context).size.width * 0.45,
-                                decoration: BoxDecoration(
-                                  border: Border.all(color:Color(0xffdadada)),
-                                  borderRadius: const BorderRadius.all(Radius.circular(15)),
-                                  color:Colors.grey[300]
-                                ),
-                                  );
-                                },
+                                    errorBuilder: (a, b, c) {
+                                      return Container(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.16,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.45,
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: Color(0xffdadada)),
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(15)),
+                                            color: Colors.grey[300]),
+                                      );
+                                    },
                                     fit: BoxFit.cover,
                                     height: MediaQuery.of(context).size.height *
                                         0.16,
@@ -598,18 +605,21 @@ class _HomeScreenState extends State<HomeScreen> {
                             ClipRRect(
                               borderRadius: BorderRadius.circular(10),
                               child: Image(
-                                errorBuilder: (a, b, c) {
-                                  return Container(
-                                     height:
-                                    MediaQuery.of(context).size.height * 0.16,
-                                width: MediaQuery.of(context).size.width * 0.45,
-                                decoration: BoxDecoration(
-                                  border: Border.all(color:Color(0xffdadada)),
-                                  borderRadius: const BorderRadius.all(Radius.circular(15)),
-                                  color:Colors.grey[300]
-                                ),
-                                  );
-                                },
+                                  errorBuilder: (a, b, c) {
+                                    return Container(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.16,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.45,
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: Color(0xffdadada)),
+                                          borderRadius: const BorderRadius.all(
+                                              Radius.circular(15)),
+                                          color: Colors.grey[300]),
+                                    );
+                                  },
                                   fit: BoxFit.cover,
                                   height:
                                       MediaQuery.of(context).size.height * 0.16,
@@ -657,14 +667,16 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: Image(
                                 errorBuilder: (a, b, c) {
                                   return Container(
-                                     height:
-                                    MediaQuery.of(context).size.height * 0.16,
-                                width: MediaQuery.of(context).size.width * 0.45,
-                                decoration: BoxDecoration(
-                                  border: Border.all(color:Color(0xffdadada)),
-                                  borderRadius: const BorderRadius.all(Radius.circular(15)),
-                                  color:Colors.grey[300]
-                                ),
+                                    height: MediaQuery.of(context).size.height *
+                                        0.16,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.45,
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color: Color(0xffdadada)),
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(15)),
+                                        color: Colors.grey[300]),
                                   );
                                 },
                                 fit: BoxFit.cover,
@@ -682,18 +694,21 @@ class _HomeScreenState extends State<HomeScreen> {
                             ClipRRect(
                               borderRadius: BorderRadius.circular(10),
                               child: Image(
-                                errorBuilder: (a, b, c) {
-                                  return Container(
-                                     height:
-                                    MediaQuery.of(context).size.height * 0.16,
-                                width: MediaQuery.of(context).size.width * 0.45,
-                                decoration: BoxDecoration(
-                                  border: Border.all(color:Color(0xffdadada)),
-                                  borderRadius: const BorderRadius.all(Radius.circular(15)),
-                                  color:Colors.grey[300]
-                                ),
-                                  );
-                                },
+                                  errorBuilder: (a, b, c) {
+                                    return Container(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.16,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.45,
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: Color(0xffdadada)),
+                                          borderRadius: const BorderRadius.all(
+                                              Radius.circular(15)),
+                                          color: Colors.grey[300]),
+                                    );
+                                  },
                                   fit: BoxFit.cover,
                                   height:
                                       MediaQuery.of(context).size.height * 0.16,
@@ -711,16 +726,18 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10),
                             child: Image(
-                              errorBuilder: (a, b, c) {
+                                errorBuilder: (a, b, c) {
                                   return Container(
-                                     height:
-                                    MediaQuery.of(context).size.height * 0.16,
-                                width: MediaQuery.of(context).size.width * 0.45,
-                                decoration: BoxDecoration(
-                                  border: Border.all(color:Color(0xffdadada)),
-                                  borderRadius: const BorderRadius.all(Radius.circular(15)),
-                                  color:Colors.grey[300]
-                                ),
+                                    height: MediaQuery.of(context).size.height *
+                                        0.16,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.45,
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color: Color(0xffdadada)),
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(15)),
+                                        color: Colors.grey[300]),
                                   );
                                 },
                                 fit: BoxFit.cover,
@@ -737,16 +754,18 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10),
                             child: Image(
-                              errorBuilder: (a, b, c) {
+                                errorBuilder: (a, b, c) {
                                   return Container(
-                                     height:
-                                    MediaQuery.of(context).size.height * 0.16,
-                                width: MediaQuery.of(context).size.width * 0.45,
-                                decoration: BoxDecoration(
-                                  border: Border.all(color:Color(0xffdadada)),
-                                  borderRadius: const BorderRadius.all(Radius.circular(15)),
-                                  color:Colors.grey[300]
-                                ),
+                                    height: MediaQuery.of(context).size.height *
+                                        0.16,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.45,
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color: Color(0xffdadada)),
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(15)),
+                                        color: Colors.grey[300]),
                                   );
                                 },
                                 fit: BoxFit.cover,
@@ -807,12 +826,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                     top: 8.0, left: 8, right: 8, bottom: 4),
                                 child: Row(
                                   children: [
-                                     const CircleAvatar(
+                                    const CircleAvatar(
                                       radius: 41,
                                       backgroundColor: Colors.black,
                                       child: CircleAvatar(
                                           radius: 40,
-                                          backgroundImage:  NetworkImage(
+                                          backgroundImage: NetworkImage(
                                               "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuB0dKQNB6ElAEzGtZ_FZmhJmphRR3BaGjmfmdO5IOTNXiEDKoTlCpSEWf1tFTEPF99dA&usqp=CAU"),
                                           backgroundColor: Colors.white),
                                     ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:svj/provider/user_provider.dart';
+import 'package:svj/screens/design_page.dart';
 import 'package:svj/screens/home_screen.dart';
 import 'package:svj/screens/login.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
       routes: {
        '/': (context) =>  LoginPage(),
        'homeScreen': (context) => HomeScreen(),
+       'designPage':(context) => Designpage(),
       },
     );
   }
