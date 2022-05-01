@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:svj/provider/user_provider.dart';
 import 'package:svj/screens/home_screen.dart';
 import 'package:svj/screens/login.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -8,7 +10,9 @@ import 'package:firebase_storage/firebase_storage.dart';
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(MyApp());
+  runApp(ChangeNotifierProvider(
+      create: (context) =>LoggedInUser() ,
+    child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {

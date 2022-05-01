@@ -2,7 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
 import 'package:svj/screens/home_screen.dart';
+import 'package:flutter/foundation.dart';
+import 'package:svj/provider/user_provider.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -197,17 +200,13 @@ class _LoginCardState extends State<LoginCard> {
                           googleSignIn.signIn().then((value) {
                             setState(() {
                               if (value != Null) {
+                                
                                 user = value!;
+                                //  Provider.of<MyList>(context,listen:false).adding(tf);
+                               Provider.of<LoggedInUser>(context,listen: false).LoggedInUserDetail(link: Image.network(user.photoUrl.toString()) );
+                                 //print(value);
                                 isLoggedIn = true;
-                                HomeScreen(
-                                  UserName: user.displayName.toString(),
-                                  UserImage:
-                                      Image.network(user.photoUrl.toString()),
-                                  isLoggedIn: true,
-                                  
-                                );
-                                Navigator.pushNamed(context, 'homeScreen');
-
+                              Navigator.pushNamed(context, 'homeScreen');
                                 Fire(value);
                               }
                             });
@@ -231,20 +230,19 @@ class _LoginCardState extends State<LoginCard> {
                     ),
                   ],
                 ),
-                 
-                Container(
-                  child: isLoggedIn
-                       ?
-                      Column(
-                          children: [
-                            Text(user.displayName.toString()),
-                            CircleAvatar(
-                                child: Image.network(user.photoUrl.toString()))
-                          ],
-                        )
-                      : Text(""),
-                ),
-                
+
+                // Container(
+                //   child: isLoggedIn
+                //       ? Column(
+                //           children: [
+                //             Text(user.displayName.toString()),
+                //             CircleAvatar(
+                //                 child: Image.network(user.photoUrl.toString()))
+                //           ],
+                //         )
+                //       : Text(""),
+                // ),
+
                 // GestureDetector(
                 //   onTap: () async {
                 //     await FirebaseAuth.instance.signOut();

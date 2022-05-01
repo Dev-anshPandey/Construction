@@ -6,6 +6,8 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:flutter_cube/flutter_cube.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+import 'package:provider/provider.dart';
+import 'package:svj/provider/user_provider.dart';
 
 IconData icon = Icons.bookmark_border;
 
@@ -27,6 +29,8 @@ getImage(BuildContext context, String ImageName) async {
 }
 
 int activeState = 0;
+//Provider.of<LoggedInUser>(context);
+//Provider.of<CarouselState>(context,listen: false).LoggedInUserDetail(link: Image.network(user.photoUrl.toString()) );
 final itemss = <Widget>[
   Column(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,8 +46,24 @@ final itemss = <Widget>[
         padding: const EdgeInsets.all(8.0),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(10),
-          child: const Image(
-              image: NetworkImage(
+          child:  Image(
+            errorBuilder: (a, b, c) {
+                                  return Builder(
+                                    builder: (context) {
+                                      return Container(
+                                         height:
+                                        MediaQuery.of(context).size.height * 0.27,
+                                width: MediaQuery.of(context).size.width * 0.93,
+                                decoration: BoxDecoration(
+                                      border: Border.all(color:Color(0xffdadada)),
+                                      borderRadius: const BorderRadius.all(Radius.circular(15)),
+                                      color:Colors.grey[300]
+                                ),
+                                      );
+                                    }
+                                  );
+                                },
+              image: const NetworkImage(
                   "https://archello.s3.eu-central-1.amazonaws.com/images/2016/07/14/exteriorcontemporary.1506081591.9647.jpg")),
         ),
       ),
@@ -63,8 +83,24 @@ final itemss = <Widget>[
         padding: const EdgeInsets.all(8.0),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(10),
-          child: const Image(
-              image: NetworkImage(
+          child:  Image(
+            errorBuilder: (a, b, c) {
+                                  return Builder(
+                                    builder: (context) {
+                                      return Container(
+                                         height:
+                                        MediaQuery.of(context).size.height * 0.27,
+                                width: MediaQuery.of(context).size.width * 0.93,
+                                decoration: BoxDecoration(
+                                      border: Border.all(color:Color(0xffdadada)),
+                                      borderRadius: const BorderRadius.all(Radius.circular(15)),
+                                      color:Colors.grey[300]
+                                ),
+                                      );
+                                    }
+                                  );
+                                },
+              image: const NetworkImage(
                   "https://cdn.pixabay.com/photo/2016/11/18/17/20/living-room-1835923__480.jpg")),
         ),
       ),
@@ -84,9 +120,25 @@ final itemss = <Widget>[
         padding: const EdgeInsets.all(8.0),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(10),
-          child: const Image(
-              image: NetworkImage(
-                  "https://i.ytimg.com/vi/F9kyco9U8hg/maxresdefault.jpg")),
+          child:  Image(
+            errorBuilder: (a, b, c) {
+                                  return Builder(
+                                    builder: (context) {
+                                      return Container(
+                                        height:
+                                        MediaQuery.of(context).size.height * 0.27,
+                                width: MediaQuery.of(context).size.width * 0.93,
+                                decoration: BoxDecoration(
+                                      border: Border.all(color:Color(0xffdadada)),
+                                      borderRadius: const BorderRadius.all(Radius.circular(15)),
+                                      color:Colors.grey[300]
+                                ),
+                                      );
+                                    }
+                                  );
+                                },
+              image:
+                 const NetworkImage("https://www.wowkitchens.in/images/img1.jpg")),
         ),
       ),
     ],
@@ -147,6 +199,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var customerImage = Provider.of<LoggedInUser>(context);
+
+    // var pactiveState = Provider.of<CarouselState>(context);
+    // print(customerImage.LoggedInUserDetail);
+    // print(customerImage.fina);
+    print(customerImage.links);
     return Scaffold(
       bottomNavigationBar: CurvedNavigationBar(
         items: items,
@@ -167,12 +225,12 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
-                children: const [
-                  SizedBox(
+                children: [
+                  const SizedBox(
                     width: 10,
                   ),
 
-                  Text(
+                  const Text(
                     "Construction",
                     style: TextStyle(
                       color: Colors.black,
@@ -180,7 +238,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       fontSize: 23,
                     ),
                   ),
-                  Expanded(child: SizedBox()),
+                  const Expanded(child: SizedBox()),
                   //   Icon(
                   //   Icons.search,
                   //   color: Colors.black,
@@ -189,11 +247,22 @@ class _HomeScreenState extends State<HomeScreen> {
                   //  SizedBox(
                   //   width: 10,
                   // // ),
-                  // CircleAvatar(
-                  //   backgroundImage: NetworkImage(
-                  //       "https://lh3.googleusercontent.com/a/AATXAJzdkkerNXT18bl9iMcQubPCAP6BkqHTCX7HeBNB=s28-c-k-no-mo"),
-                  // ),
-                  SizedBox(
+                  customerImage.links != null
+                      ? ClipRRect(
+                          borderRadius: BorderRadius.circular(30),
+                          child: CircleAvatar(
+                            maxRadius: 15,
+                            child: customerImage.links,
+                          ),
+                        )
+                      : Container(
+                          child: const Icon(
+                            Icons.account_circle_outlined,
+                            size: 35,
+                            color: Colors.black,
+                          ),
+                        ),
+                  const SizedBox(
                     width: 10,
                   )
                 ],
@@ -361,9 +430,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         autoPlayInterval: Duration(seconds: 3),
                         height: MediaQuery.of(context).size.height * 0.32,
                         onPageChanged: (index, reason) {
-                          setState(() {
-                            activeState = index;
-                          });
+                          Provider.of<LoggedInUser>(context, listen: false)
+                              .getActiveState(index);
                         },
                         viewportFraction: 1),
                   ),
@@ -409,20 +477,57 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                      
+                        //                   Builder(builder: (context) {
+                        //   return FutureBuilder(
+                        //     future:
+                        //         getImage(context, "home-exterior-designing-service-500x500.jpg"),
+                        //     builder: (context, snapshot) {
+                        //       if (snapshot.connectionState == ConnectionState.done) {
+                        //         return Padding(
+                        //           padding: const EdgeInsets.all(8.0),
+                        //           child: Container(
+                        //             height: MediaQuery.of(context).size.height * 0.16,
+                        //              width: MediaQuery.of(context).size.width * 0.45,
+                        //             child: snapshot.data as Widget),
+                        //         );
+                        //       }
+                        //       if (snapshot.connectionState == ConnectionState.waiting) {
+                        //         return Container(
+                        //           child: CircularProgressIndicator(),
+                        //         );
+                        //       }
+
+                        //       return Container();
+                        //     },
+                        //   );
+                        // })
                         Container(
+                          
                           margin: EdgeInsets.all(8),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20)),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10),
                             child: Image(
+                              errorBuilder: (a, b, c) {
+                                  return Container(
+                                     height:
+                                    MediaQuery.of(context).size.height * 0.16,
+                                width: MediaQuery.of(context).size.width * 0.45,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color:Color(0xffdadada)),
+                                  borderRadius: const BorderRadius.all(Radius.circular(15)),
+                                  color:Colors.grey[300]
+                                ),
+                                  );
+                                },
                                 fit: BoxFit.cover,
                                 height:
                                     MediaQuery.of(context).size.height * 0.16,
                                 width: MediaQuery.of(context).size.width * 0.45,
                                 image: const NetworkImage(
-                                    "https://i.pinimg.com/originals/da/02/78/da0278e761c149630553f4dc4c742b4b.jpg")),
+                                  "https://i.pinimg.com/originals/da/02/78/da0278e761c149630553f4dc4c742b4b.jpg",
+                                )),
                           ),
                         ),
                         Container(
@@ -431,6 +536,18 @@ class _HomeScreenState extends State<HomeScreen> {
                             ClipRRect(
                               borderRadius: BorderRadius.circular(10),
                               child: Image(
+                                errorBuilder: (a, b, c) {
+                                  return Container(
+                                     height:
+                                    MediaQuery.of(context).size.height * 0.16,
+                                width: MediaQuery.of(context).size.width * 0.45,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color:Color(0xffdadada)),
+                                  borderRadius: const BorderRadius.all(Radius.circular(15)),
+                                  color:Colors.grey[300]
+                                ),
+                                  );
+                                },
                                   fit: BoxFit.cover,
                                   height:
                                       MediaQuery.of(context).size.height * 0.16,
@@ -445,12 +562,24 @@ class _HomeScreenState extends State<HomeScreen> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Container(
-                              margin: EdgeInsets.all(8),
+                              margin: const EdgeInsets.all(8),
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20)),
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(10),
                                 child: Image(
+                                  errorBuilder: (a, b, c) {
+                                  return Container(
+                                     height:
+                                    MediaQuery.of(context).size.height * 0.16,
+                                width: MediaQuery.of(context).size.width * 0.45,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color:Color(0xffdadada)),
+                                  borderRadius: const BorderRadius.all(Radius.circular(15)),
+                                  color:Colors.grey[300]
+                                ),
+                                  );
+                                },
                                     fit: BoxFit.cover,
                                     height: MediaQuery.of(context).size.height *
                                         0.16,
@@ -469,6 +598,18 @@ class _HomeScreenState extends State<HomeScreen> {
                             ClipRRect(
                               borderRadius: BorderRadius.circular(10),
                               child: Image(
+                                errorBuilder: (a, b, c) {
+                                  return Container(
+                                     height:
+                                    MediaQuery.of(context).size.height * 0.16,
+                                width: MediaQuery.of(context).size.width * 0.45,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color:Color(0xffdadada)),
+                                  borderRadius: const BorderRadius.all(Radius.circular(15)),
+                                  color:Colors.grey[300]
+                                ),
+                                  );
+                                },
                                   fit: BoxFit.cover,
                                   height:
                                       MediaQuery.of(context).size.height * 0.16,
@@ -514,12 +655,25 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10),
                             child: Image(
+                                errorBuilder: (a, b, c) {
+                                  return Container(
+                                     height:
+                                    MediaQuery.of(context).size.height * 0.16,
+                                width: MediaQuery.of(context).size.width * 0.45,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color:Color(0xffdadada)),
+                                  borderRadius: const BorderRadius.all(Radius.circular(15)),
+                                  color:Colors.grey[300]
+                                ),
+                                  );
+                                },
                                 fit: BoxFit.cover,
                                 height:
                                     MediaQuery.of(context).size.height * 0.16,
                                 width: MediaQuery.of(context).size.width * 0.45,
                                 image: const NetworkImage(
-                                    "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/modern-bedroom-2-1575657173.jpg")),
+                                  "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/modern-bedroom-2-1575657173.jpg",
+                                )),
                           ),
                         ),
                         Container(
@@ -528,6 +682,18 @@ class _HomeScreenState extends State<HomeScreen> {
                             ClipRRect(
                               borderRadius: BorderRadius.circular(10),
                               child: Image(
+                                errorBuilder: (a, b, c) {
+                                  return Container(
+                                     height:
+                                    MediaQuery.of(context).size.height * 0.16,
+                                width: MediaQuery.of(context).size.width * 0.45,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color:Color(0xffdadada)),
+                                  borderRadius: const BorderRadius.all(Radius.circular(15)),
+                                  color:Colors.grey[300]
+                                ),
+                                  );
+                                },
                                   fit: BoxFit.cover,
                                   height:
                                       MediaQuery.of(context).size.height * 0.16,
@@ -545,6 +711,18 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10),
                             child: Image(
+                              errorBuilder: (a, b, c) {
+                                  return Container(
+                                     height:
+                                    MediaQuery.of(context).size.height * 0.16,
+                                width: MediaQuery.of(context).size.width * 0.45,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color:Color(0xffdadada)),
+                                  borderRadius: const BorderRadius.all(Radius.circular(15)),
+                                  color:Colors.grey[300]
+                                ),
+                                  );
+                                },
                                 fit: BoxFit.cover,
                                 height:
                                     MediaQuery.of(context).size.height * 0.16,
@@ -559,6 +737,18 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10),
                             child: Image(
+                              errorBuilder: (a, b, c) {
+                                  return Container(
+                                     height:
+                                    MediaQuery.of(context).size.height * 0.16,
+                                width: MediaQuery.of(context).size.width * 0.45,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color:Color(0xffdadada)),
+                                  borderRadius: const BorderRadius.all(Radius.circular(15)),
+                                  color:Colors.grey[300]
+                                ),
+                                  );
+                                },
                                 fit: BoxFit.cover,
                                 height:
                                     MediaQuery.of(context).size.height * 0.16,
@@ -605,7 +795,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Card(
-                        child: Container(               
+                        child: Container(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -617,11 +807,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                     top: 8.0, left: 8, right: 8, bottom: 4),
                                 child: Row(
                                   children: [
-                                    const CircleAvatar(
-                                      
-                                      radius: 40,
-                                      backgroundImage: NetworkImage(
-                                          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuB0dKQNB6ElAEzGtZ_FZmhJmphRR3BaGjmfmdO5IOTNXiEDKoTlCpSEWf1tFTEPF99dA&usqp=CAU"),
+                                     const CircleAvatar(
+                                      radius: 41,
+                                      backgroundColor: Colors.black,
+                                      child: CircleAvatar(
+                                          radius: 40,
+                                          backgroundImage:  NetworkImage(
+                                              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuB0dKQNB6ElAEzGtZ_FZmhJmphRR3BaGjmfmdO5IOTNXiEDKoTlCpSEWf1tFTEPF99dA&usqp=CAU"),
+                                          backgroundColor: Colors.white),
                                     ),
                                     const SizedBox(
                                       width: 20,
@@ -637,7 +830,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                         Text("Projects: 5",
                                             style:
                                                 TextStyle(color: Colors.grey)),
-                                        Text("Working Location : Gor..\nDeoria , Mahrajganj",
+                                        Text(
+                                            "Working Location : Gor..\nDeoria , Mahrajganj",
                                             style:
                                                 TextStyle(color: Colors.grey)),
                                       ],
@@ -652,9 +846,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                 padding: const EdgeInsets.only(
                                     left: 14.0, right: 8, bottom: 8),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
                                   children: [
-                                    const Text("Er. Abc xyz"),
+                                    const Text(
+                                      "Er. Abc xyz",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
                                     SizedBox(
                                       width: 30,
                                     ),
@@ -683,28 +882,25 @@ class _HomeScreenState extends State<HomeScreen> {
                                           padding: EdgeInsets.only(right: 8.0),
                                           child: Text("(4)"),
                                         ),
-                                       
                                       ],
-                                    )
-                                    ),
-                                 const   SizedBox(
+                                    )),
+                                    const SizedBox(
                                       width: 25,
                                     ),
-                                      const Icon(Icons.message,color: Colors.blue)
+                                    const Icon(Icons.message,
+                                        color: Colors.blue)
                                   ],
                                 ),
                               ),
                               const SizedBox(
                                 height: 4,
                               ),
-                             
                             ],
                           ),
                         ),
-                        
                       ),
-                         Card(
-                        child: Container(               
+                      Card(
+                        child: Container(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -717,10 +913,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: Row(
                                   children: [
                                     const CircleAvatar(
-                                      
-                                      radius: 40,
-                                      backgroundImage: NetworkImage(
-                                          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuB0dKQNB6ElAEzGtZ_FZmhJmphRR3BaGjmfmdO5IOTNXiEDKoTlCpSEWf1tFTEPF99dA&usqp=CAU"),
+                                      radius: 41,
+                                      backgroundColor: Colors.black,
+                                      child: CircleAvatar(
+                                        radius: 40,
+                                        backgroundImage: NetworkImage(
+                                            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuB0dKQNB6ElAEzGtZ_FZmhJmphRR3BaGjmfmdO5IOTNXiEDKoTlCpSEWf1tFTEPF99dA&usqp=CAU"),
+                                      ),
                                     ),
                                     const SizedBox(
                                       width: 20,
@@ -736,7 +935,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                         Text("Projects: 5",
                                             style:
                                                 TextStyle(color: Colors.grey)),
-                                        Text("Working Location : Gor..\nDeoria , Mahrajganj",
+                                        Text(
+                                            "Working Location : Gor..\nDeoria , Mahrajganj",
                                             style:
                                                 TextStyle(color: Colors.grey)),
                                       ],
@@ -751,9 +951,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                 padding: const EdgeInsets.only(
                                     left: 14.0, right: 8, bottom: 8),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
                                   children: [
-                                    const Text("Er. Abc xyz"),
+                                    const Text(
+                                      "Er. Abc xyz",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
                                     SizedBox(
                                       width: 30,
                                     ),
@@ -782,28 +987,25 @@ class _HomeScreenState extends State<HomeScreen> {
                                           padding: EdgeInsets.only(right: 8.0),
                                           child: Text("(4)"),
                                         ),
-                                       
                                       ],
-                                    )
-                                    ),
-                                 const   SizedBox(
+                                    )),
+                                    const SizedBox(
                                       width: 25,
                                     ),
-                                      const Icon(Icons.message,color: Colors.blue)
+                                    const Icon(Icons.message,
+                                        color: Colors.blue)
                                   ],
                                 ),
                               ),
                               const SizedBox(
                                 height: 4,
                               ),
-                             
                             ],
                           ),
                         ),
-                        
                       ),
-                        Card(
-                        child: Container(               
+                      Card(
+                        child: Container(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -816,10 +1018,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: Row(
                                   children: [
                                     const CircleAvatar(
-                                      
-                                      radius: 40,
-                                      backgroundImage: NetworkImage(
-                                          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuB0dKQNB6ElAEzGtZ_FZmhJmphRR3BaGjmfmdO5IOTNXiEDKoTlCpSEWf1tFTEPF99dA&usqp=CAU"),
+                                      radius: 41,
+                                      backgroundColor: Colors.black,
+                                      child: CircleAvatar(
+                                        radius: 40,
+                                        backgroundImage: NetworkImage(
+                                            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuB0dKQNB6ElAEzGtZ_FZmhJmphRR3BaGjmfmdO5IOTNXiEDKoTlCpSEWf1tFTEPF99dA&usqp=CAU"),
+                                      ),
                                     ),
                                     const SizedBox(
                                       width: 20,
@@ -835,7 +1040,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                         Text("Projects: 5",
                                             style:
                                                 TextStyle(color: Colors.grey)),
-                                        Text("Working Location : Gor..\nDeoria , Mahrajganj",
+                                        Text(
+                                            "Working Location : Gor..\nDeoria , Mahrajganj",
                                             style:
                                                 TextStyle(color: Colors.grey)),
                                       ],
@@ -850,9 +1056,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                 padding: const EdgeInsets.only(
                                     left: 14.0, right: 8, bottom: 8),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
                                   children: [
-                                    const Text("Er. Abc xyz"),
+                                    const Text(
+                                      "Er. Abc xyz",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
                                     SizedBox(
                                       width: 30,
                                     ),
@@ -881,28 +1092,25 @@ class _HomeScreenState extends State<HomeScreen> {
                                           padding: EdgeInsets.only(right: 8.0),
                                           child: Text("(4)"),
                                         ),
-                                       
                                       ],
-                                    )
-                                    ),
-                                 const   SizedBox(
+                                    )),
+                                    const SizedBox(
                                       width: 25,
                                     ),
-                                      const Icon(Icons.message,color: Colors.blue)
+                                    const Icon(Icons.message,
+                                        color: Colors.blue)
                                   ],
                                 ),
                               ),
                               const SizedBox(
                                 height: 4,
                               ),
-                             
                             ],
                           ),
                         ),
-                        
                       ),
-                       Card(
-                        child: Container(               
+                      Card(
+                        child: Container(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -915,10 +1123,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: Row(
                                   children: [
                                     const CircleAvatar(
-                                      
-                                      radius: 40,
-                                      backgroundImage: NetworkImage(
-                                          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuB0dKQNB6ElAEzGtZ_FZmhJmphRR3BaGjmfmdO5IOTNXiEDKoTlCpSEWf1tFTEPF99dA&usqp=CAU"),
+                                      radius: 41,
+                                      backgroundColor: Colors.black,
+                                      child: CircleAvatar(
+                                        radius: 40,
+                                        backgroundImage: NetworkImage(
+                                            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuB0dKQNB6ElAEzGtZ_FZmhJmphRR3BaGjmfmdO5IOTNXiEDKoTlCpSEWf1tFTEPF99dA&usqp=CAU"),
+                                      ),
                                     ),
                                     const SizedBox(
                                       width: 20,
@@ -934,7 +1145,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                         Text("Projects: 5",
                                             style:
                                                 TextStyle(color: Colors.grey)),
-                                        Text("Working Location : Gor..\nDeoria , Mahrajganj",
+                                        Text(
+                                            "Working Location : Gor..\nDeoria , Mahrajganj",
                                             style:
                                                 TextStyle(color: Colors.grey)),
                                       ],
@@ -949,9 +1161,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                 padding: const EdgeInsets.only(
                                     left: 14.0, right: 8, bottom: 8),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
                                   children: [
-                                    const Text("Er. Abc xyz"),
+                                    const Text(
+                                      "Er. Abc xyz",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
                                     SizedBox(
                                       width: 30,
                                     ),
@@ -980,25 +1197,22 @@ class _HomeScreenState extends State<HomeScreen> {
                                           padding: EdgeInsets.only(right: 8.0),
                                           child: Text("(4)"),
                                         ),
-                                       
                                       ],
-                                    )
-                                    ),
-                                 const   SizedBox(
+                                    )),
+                                    const SizedBox(
                                       width: 25,
                                     ),
-                                      const Icon(Icons.message,color: Colors.blue)
+                                    const Icon(Icons.message,
+                                        color: Colors.blue)
                                   ],
                                 ),
                               ),
                               const SizedBox(
                                 height: 4,
                               ),
-                             
                             ],
                           ),
                         ),
-                        
                       ),
                     ],
                   ),
@@ -1007,16 +1221,16 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 30),
 
               //Chair by Poly by Google [CC-BY], via Poly Pizza
-              Container(
-                height: 400,
-                width: 400,
-                child: Cube(
-                  onSceneCreated: (Scene scene) {
-                    scene.world.add(chair);
-                    scene.camera.zoom = 12;
-                  },
-                ),
-              )
+              // Container(
+              //   height: 400,
+              //   width: 400,
+              //   child: Cube(
+              //     onSceneCreated: (Scene scene) {
+              //       scene.world.add(chair);
+              //       scene.camera.zoom = 12;
+              //     },
+              //   ),
+              // )
             ],
           ),
         ),
@@ -1056,13 +1270,14 @@ class DisplayType extends StatelessWidget {
 }
 
 class DotIndicator extends StatelessWidget {
-  const DotIndicator({Key? key}) : super(key: key);
+  // const DotIndicator({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var customerImage = Provider.of<LoggedInUser>(context);
     return AnimatedSmoothIndicator(
       count: itemss.length,
-      activeIndex: activeState,
+      activeIndex: customerImage.activeState,
       effect: const SlideEffect(
           activeDotColor: Colors.black,
           dotColor: Colors.grey,
@@ -1122,8 +1337,6 @@ class DotIndicator extends StatelessWidget {
 //         ),
 //       ),
 //     );
-
-
 
 // Builder(builder: (context) {
 //         return FutureBuilder(
